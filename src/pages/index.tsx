@@ -2,8 +2,14 @@ import ArticleList from "@/components/Article/List";
 import NavBar from "@/components/NavBar";
 import { Box } from "@mui/material";
 import Head from "next/head";
+import { Articles } from "../components/Article/List";
+import { GetServerSideProps } from "next";
 
-export default function Home() {
+type Props = {
+  articles: Articles;
+};
+
+export default function Home({ articles }: Props) {
   return (
     <>
       <Head>
@@ -14,9 +20,17 @@ export default function Home() {
       <main>
         <NavBar />
         <Box>
-          <ArticleList />
+          <ArticleList articles={articles} />
         </Box>
       </main>
     </>
   );
 }
+
+export const getServerSideProps = (async () => {
+  const res = await fetch(
+    "https://newsapi.org/v2/top-headlines?country=us&apiKey=180d5ce6f1bd4016ab51a3be9126afe8"
+  );
+  const articles = await res.json();
+  return { props: { articles } };
+}) satisfies GetServerSideProps<{ articles: Articles }>;

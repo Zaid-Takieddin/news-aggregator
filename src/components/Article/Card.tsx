@@ -5,8 +5,13 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
+import { Article } from "./List";
 
-const ArticleCard = () => {
+type Props = {
+  article: Article;
+};
+
+const ArticleCard = ({ article }: Props) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -20,20 +25,18 @@ const ArticleCard = () => {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={article.title}
+        subheader={article.publishedAt}
       />
       <CardMedia
         component="img"
         height="194"
-        image="/next.svg"
-        alt="Paella dish"
+        image={article.urlToImage}
+        alt={article.title}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {article.description}
         </Typography>
       </CardContent>
     </Card>
