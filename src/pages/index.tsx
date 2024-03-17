@@ -1,3 +1,4 @@
+import ArticleList from "@/components/Article/List";
 import NavBar from "@/components/NavBar";
 import { Box } from "@mui/material";
 import Head from "next/head";
@@ -12,7 +13,9 @@ export default function Home() {
       </Head>
       <main>
         <NavBar />
-        <Box>Hello</Box>
+        <Box>
+          <ArticleList />
+        </Box>
       </main>
     </>
   );
