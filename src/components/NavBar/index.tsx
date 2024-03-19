@@ -1,13 +1,16 @@
-import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { alpha, styled } from "@mui/material/styles";
+import useScrollTrigger from "@mui/material/useScrollTrigger";
+import { debounce } from "lodash";
+import { useRouter } from "next/router";
+import * as React from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -39,7 +42,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   width: "100%",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     [theme.breakpoints.up("sm")]: {
@@ -51,39 +53,73 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const NavBar = () => {
+const NavBar = ({ ...props }) => {
+  const router = useRouter();
+
+  const handleSearch = (searchQuery: string) => {
+    router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
+  };
+
+  const handleInputChange = debounce(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      console.log("first", event.target.value);
+      const searchQuery = event.target.value;
+      if (event.key === "Enter") handleSearch(searchQuery);
+    },
+    500
+  );
+
+  function ElevationScroll(props: {
+    window?: () => Window;
+    children: React.ReactElement;
+  }) {
+    const { children, window } = props;
+
+    const trigger = useScrollTrigger({
+      disableHysteresis: true,
+      threshold: 0,
+      target: window ? window() : undefined,
+    });
+
+    return React.cloneElement(children, {
+      elevation: trigger ? 4 : 0,
+    });
+  }
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            News Aggregator
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-        </Toolbar>
-      </AppBar>
+    <Box sx={{ flexGrow: 1, marginBottom: 10 }}>
+      <ElevationScroll {...props}>
+        <AppBar>
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            >
+              News Aggregator
+            </Typography>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                onKeyDown={handleInputChange}
+              />
+            </Search>
+          </Toolbar>
+        </AppBar>
+      </ElevationScroll>
     </Box>
   );
 };

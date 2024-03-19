@@ -1,39 +1,27 @@
+import { Box, Grid } from "@mui/material";
 import ArticleCard from "./Card";
-import { useState, useEffect } from "react";
+import { Article } from "@/types";
 
 type Props = {
-  articles: Articles;
-};
-
-export type Articles = {
-  status: string;
-  totalResutl: number;
   articles: Article[];
-};
-export type Article = {
-  author: string;
-  content: string;
-  description: string;
-  publishedAt: string;
-  source: { id: string; name: string };
-  title: string;
-  url: string;
-  urlToImage: string;
+  title?: string;
 };
 
-const ArticleList = ({ articles: articelsResult }: Props) => {
-  const [articles, setArticles] = useState<Article[]>();
-
-  useEffect(() => {
-    if (articelsResult.status === "ok") setArticles(articelsResult.articles);
-  }, []);
+const ArticleList = ({ articles }: Props) => {
+  console.log("articles", articles);
 
   return (
-    <div>
-      {articles?.map((article, idx) => (
-        <ArticleCard key={idx} article={article} />
-      ))}
-    </div>
+    <Box sx={{ padding: 5 }}>
+      <Grid container spacing={2} alignItems="stretch">
+        {articles.length > 0
+          ? articles.map((article, idx) => (
+              <Grid key={idx} item xs={12} sm={6} md={4} lg={3}>
+                <ArticleCard article={article} />
+              </Grid>
+            ))
+          : "No Results Found"}
+      </Grid>
+    </Box>
   );
 };
 
