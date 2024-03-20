@@ -77,3 +77,21 @@ export interface NewYorkTimesSearchArticle {
   word_count: number;
   _id: string;
 }
+
+export interface GNewsArticle {
+  title: string;
+  description: string;
+  content: string;
+  url: string;
+  image: string;
+  publishedAt: string;
+  source: {
+    name: string;
+    url: string;
+  };
+}
+
+export interface SearchFilter {
+  source: string[];
+  category: string[];
+}

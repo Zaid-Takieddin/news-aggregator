@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import SearchFilterContextProvider from "@/context/searchFilterContext";
 import { Container } from "@mui/material";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -6,7 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <NavBar />
       <main>
-        <Container>{children}</Container>
+        <Container>
+          <SearchFilterContextProvider>{children}</SearchFilterContextProvider>
+        </Container>
       </main>
     </>
   );

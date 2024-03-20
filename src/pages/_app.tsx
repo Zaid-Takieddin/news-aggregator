@@ -8,9 +8,11 @@ const ProgressBar = dynamic(() => import("../components/BarProgress"), {
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Layout>
-      <Component {...pageProps} />;
-      <ProgressBar />
-    </Layout>
+    <>
+      <Layout>
+        <Component {...pageProps} />
+        <ProgressBar />
+      </Layout>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { Article } from "@/types";
 import {
+  normalizeGNewsData,
   normalizeNewYorkTimesData,
   normalizeNewsApiData,
 } from "@/utils/DataNormalizers";
@@ -11,12 +12,14 @@ import Homepage from "./homepage";
 type Props = {
   openNewsaArticles: Article[];
   newYorkTimesArticles: Article[];
+  gNewsArticles: Article[];
 };
 
 export default function Home({
   openNewsaArticles,
-  newYorkTimesArticles,
-}: Props) {
+}: // newYorkTimesArticles,
+// gNewsArticles,
+Props) {
   return (
     <>
       <Head>
@@ -26,50 +29,38 @@ export default function Home({
       </Head>
       <main>
         <Homepage
-          newYorkTimesArticles={newYorkTimesArticles}
+          // newYorkTimesArticles={newYorkTimesArticles}
           openNewsaArticles={openNewsaArticles}
+          // gNewArticles={gNewsArticles}
         />
       </main>
     </>
   );
 }
 
-export const getServerSideProps = (async (context) => {
-  const searchQuery = context.query.q as string;
-
-  // const [openNewsResponse, newYorkTimesResponse] =
-  //   searchQuery?.length > 0
-  //     ? await Promise.all([
-  //         axios.get(
-  //           `https://newsapi.org/v2/top-headlines?country=us&apiKey=180d5ce6f1bd4016ab51a3be9126afe8&q=${searchQuery}`
-  //         ),
-  //         axios.get(
-  //           `https://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchQuery}&api-key=8Af3wNwCKq5QdIrYh8QD79ismW98O8kr`
-  //         ),
-  //       ])
-  //     : await Promise.all([
-  //         axios.get(
-  //           `https://newsapi.org/v2/top-headlines?country=us&apiKey=180d5ce6f1bd4016ab51a3be9126afe8`
-  //         ),
-  //         axios.get(
-  //           "https://api.nytimes.com/svc/mostpopular/v2/viewed/30.json?api-key=8Af3wNwCKq5QdIrYh8QD79ismW98O8kr"
-  //         ),
-  //       ]);
+export const getServerSideProps = (async () => {
   const openNewsResponse = await axios.get(
     "https://newsapi.org/v2/top-headlines?country=us&apiKey=180d5ce6f1bd4016ab51a3be9126afe8"
   );
-  const newYorkTimesResponse = await axios.get(
-    "https://api.nytimes.com/svc/mostpopular/v2/viewed/30.json?api-key=8Af3wNwCKq5QdIrYh8QD79ismW98O8kr"
-  );
+  // const newYorkTimesResponse = await axios.get(
+  //   "https://api.nytimes.com/svc/mostpopular/v2/viewed/30.json?api-key=8Af3wNwCKq5QdIrYh8QD79ismW98O8kr"
+  // );
+  // const gNewsResponse = await axios.get(
+  //   "https://gnews.io/api/v4/top-headlines?category=general&lang=en&country=us&max=10&apikey=67987a9a128b5a6b3dcf3cf5c7152275"
+  // );
   const openNewsaArticles = normalizeNewsApiData(
     openNewsResponse.data.articles
   );
-  const newYorkTimesArticles = normalizeNewYorkTimesData(
-    newYorkTimesResponse.data.results
-  );
+  // const newYorkTimesArticles = normalizeNewYorkTimesData(
+  //   newYorkTimesResponse.data.results
+  // );
+  // const gNewsArticles = normalizeGNewsData(gNewsResponse.data);
 
-  return { props: { openNewsaArticles, newYorkTimesArticles } };
+  return {
+    props: { openNewsaArticles /*newYorkTimesArticles*/ /*gNewsArticles*/ },
+  };
 }) satisfies GetServerSideProps<{
   openNewsaArticles: Article[];
-  newYorkTimesArticles: Article[];
+  // newYorkTimesArticles: Article[];
+  // gNewsArticles: Article[];
 }>;
