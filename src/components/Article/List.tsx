@@ -12,11 +12,14 @@ const ArticleList = ({ articles }: Props) => {
     <Box sx={{ padding: 5 }}>
       <Grid container spacing={2} alignItems="stretch">
         {articles.length > 0
-          ? articles.map((article, idx) => (
-              <Grid key={idx} item xs={12} sm={6} md={4} lg={3}>
-                <ArticleCard article={article} />
-              </Grid>
-            ))
+          ? articles.map(
+              (article, idx) =>
+                article.title !== "[Removed]" && (
+                  <Grid key={idx} item xs={12} sm={6} md={4} lg={3}>
+                    <ArticleCard article={article} />
+                  </Grid>
+                )
+            )
           : "No Results Found"}
       </Grid>
     </Box>
