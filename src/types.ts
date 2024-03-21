@@ -95,3 +95,13 @@ export interface SearchFilter {
   source: string[];
   category: string[];
 }
+
+export interface OpenNewsSources {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  category: string;
+  language: string;
+  country: string;
+}

@@ -104,7 +104,12 @@ const NavBar = ({ ...props }) => {
               variant="h6"
               noWrap
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", sm: "block" },
+                "&:hover": { cursor: "pointer" },
+              }}
+              onClick={() => router.push("/")}
             >
               News Aggregator
             </Typography>

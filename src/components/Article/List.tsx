@@ -8,8 +8,6 @@ type Props = {
 };
 
 const ArticleList = ({ articles }: Props) => {
-  console.log("articles", articles);
-
   return (
     <Box sx={{ padding: 5 }}>
       <Grid container spacing={2} alignItems="stretch">

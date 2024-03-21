@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -21,7 +20,7 @@ const MenuProps = {
 
 type Props = {
   label: string;
-  data: string[];
+  data: { id?: string; name: string }[];
   value: string[];
   setValue: React.Dispatch<React.SetStateAction<string[]>>;
 };
@@ -54,8 +53,8 @@ export default function Filter({ label, data, value, setValue }: Props) {
           MenuProps={MenuProps}
         >
           {data.map((item) => (
-            <MenuItem key={item} value={item}>
-              {item}
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
             </MenuItem>
           ))}
         </Select>
